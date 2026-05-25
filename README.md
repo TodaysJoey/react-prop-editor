@@ -2,7 +2,7 @@
 
 React Prop Editor는 컴포넌트를 선택하고, 오른쪽 Inspector에서 props를 수정하면 가운데 Preview에 즉시 반영되는 간단한 컴포넌트 편집기입니다.
 
-포트폴리오 관점에서는 React의 단방향 데이터 흐름, 부모 상태 관리, props 기반 UI 렌더링을 보여주기 위한 학습 프로젝트입니다.
+React의 단방향 데이터 흐름, 부모 상태 관리, props 기반 UI 렌더링을 보여주기 위한 학습 프로젝트입니다.
 
 ## 현재 지원 컴포넌트
 
@@ -36,13 +36,33 @@ App
 ## 핵심 상태
 
 ```ts
-const [components, setComponents] = useState<ComponentItem[]>(...)
+const [components, setComponents] = useState<EditorNode[]>(...)
 const [selectedComponentId, setSelectedComponentId] = useState('btn-1')
 ```
 
 - `components`: 편집 가능한 컴포넌트 목록과 각 컴포넌트의 props를 저장합니다.
 - `selectedComponentId`: 현재 사용자가 선택한 컴포넌트의 id를 저장합니다.
 - `selectedComponent`: `components`와 `selectedComponentId`를 기준으로 계산되는 현재 편집 대상입니다.
+
+## 에디터 데이터 shape
+
+현재 에디터는 `EditorNode[]` 배열을 편집 데이터의 중심으로 사용합니다.
+
+각 `EditorNode`는 공통으로 `id`, `type`, `props`를 가집니다.
+
+```ts
+type EditorNode = {
+  id: string
+  type: 'Button' | 'Card' | 'Input'
+  props: ButtonProps | CardProps | InputProps
+}
+```
+
+- `id`: 사이드바 선택과 배열 업데이트에 사용하는 고유 값입니다.
+- `type`: 어떤 Preview와 Inspector 설정을 사용할지 결정하는 값입니다.
+- `props`: 실제 Preview 컴포넌트에 전달되는 편집 가능한 속성입니다.
+
+`type`에 따라 `props` 모양이 달라집니다. 예를 들어 `Button`은 `label`, `variant`, `disabled`를 가지고, `Card`는 `title`, `description`을 가집니다.
 
 ## State 구조
 

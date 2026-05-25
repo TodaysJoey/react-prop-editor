@@ -1,14 +1,14 @@
-import type { ComponentItem } from '../types/component'
+import type { EditorNode } from '../types/editor'
 import CheckboxField from './inspector/CheckboxField'
 import SelectField from './inspector/SelectField'
 import TextField from './inspector/TextField'
 
-type ButtonVariant = Extract<ComponentItem, { type: 'Button' }>['props']['variant']
+type ButtonVariant = Extract<EditorNode, { type: 'Button' }>['props']['variant']
 const buttonVariantOptions = ['primary', 'secondary'] as const
 
 type InspectorPaneProps = {
-  component?: ComponentItem
-  onChangeComponent: (component: ComponentItem) => void
+  component?: EditorNode
+  onChangeComponent: (component: EditorNode) => void
 }
 
 const InspectorPane = ({ component, onChangeComponent }: InspectorPaneProps) => {

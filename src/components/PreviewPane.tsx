@@ -1,9 +1,9 @@
 import type { ComponentType } from 'react'
-import type { ComponentItem } from '../types/component'
+import type { EditorNode } from '../types/editor'
 import { componentRegistry } from '../registry/componentRegistry'
 
 type PreviewPaneProps = {
-  component?: ComponentItem
+  component?: EditorNode
 }
 
 const PreviewPane = ({ component }: PreviewPaneProps) => {

@@ -2,11 +2,11 @@ import { useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import PreviewPane from '../components/PreviewPane'
 import InspectorPane from '../components/InspectorPane'
-import type { ComponentItem } from '../types/component'
+import type { EditorNode } from '../types/editor'
 import '/src/styles/App.css'
 
 function App() {
-  const [components, setComponents] = useState<ComponentItem[]>([
+  const [components, setComponents] = useState<EditorNode[]>([
     {
       id: 'btn-1',
       type: 'Button',
@@ -37,7 +37,7 @@ function App() {
   const [selectedComponentId, setSelectedComponentId] = useState('btn-1')
   const selectedComponent = components.find((component) => component.id === selectedComponentId)
 
-  const updateComponent = (nextComponent: ComponentItem) => {
+  const updateComponent = (nextComponent: EditorNode) => {
     setComponents((currentComponents) =>
       currentComponents.map((component) =>
         component.id === nextComponent.id ? nextComponent : component,

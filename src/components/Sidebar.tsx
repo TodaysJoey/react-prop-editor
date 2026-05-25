@@ -1,7 +1,7 @@
-import type { ComponentItem } from '../types/component'
+import type { EditorNode } from '../types/editor'
 
 type SidebarProps = {
-  components: ComponentItem[]
+  components: EditorNode[]
   selectedComponentId: string
   onSelectComponent: (id: string) => void
 }
