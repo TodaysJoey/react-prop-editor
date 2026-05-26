@@ -1,10 +1,13 @@
 import type { EditorNode } from '../types/editor'
+import { componentRegistry } from '../registry/componentRegistry'
 import CheckboxField from './inspector/CheckboxField'
 import SelectField from './inspector/SelectField'
 import TextField from './inspector/TextField'
 
+type ButtonProps = Extract<EditorNode, { type: 'Button' }>['props']
 type ButtonVariant = Extract<EditorNode, { type: 'Button' }>['props']['variant']
-const buttonVariantOptions = ['primary', 'secondary'] as const
+type CardProps = Extract<EditorNode, { type: 'Card' }>['props']
+type InputProps = Extract<EditorNode, { type: 'Input' }>['props']
 
 type InspectorPaneProps = {
   component?: EditorNode
@@ -22,122 +25,139 @@ const InspectorPane = ({ component, onChangeComponent }: InspectorPaneProps) => 
   }
 
   if (component.type === 'Button') {
-    const handleLabelChange = (label: string) => {
+    const updateButtonProp = <PropName extends keyof ButtonProps>(
+      propName: PropName,
+      value: ButtonProps[PropName],
+    ) => {
       onChangeComponent({
         ...component,
         props: {
           ...component.props,
-          label,
+          [propName]: value,
         },
       })
     }
 
-    const handleVariantChange = (variant: ButtonVariant) => {
-      onChangeComponent({
-        ...component,
-        props: {
-          ...component.props,
-          variant,
-        },
-      })
-    }
-
-    const handleDisabledChange = (disabled: boolean) => {
-      onChangeComponent({
-        ...component,
-        props: {
-          ...component.props,
-          disabled,
-        },
-      })
-    }
+    const buttonPropsSchema = componentRegistry.Button.propsSchema
 
     return (
       <aside className="inspector-pane">
         <h2>Inspector</h2>
-        <TextField label="label" value={component.props.label} onChange={handleLabelChange} />
-        <SelectField
-          label="variant"
-          value={component.props.variant}
-          options={buttonVariantOptions}
-          onChange={handleVariantChange}
-        />
-        <CheckboxField
-          label="disabled"
-          checked={component.props.disabled}
-          onChange={handleDisabledChange}
-        />
+        {Object.entries(buttonPropsSchema).map(([propName, schema]) => {
+          const buttonPropName = propName as keyof ButtonProps
+
+          if (schema.type === 'text') {
+            return (
+              <TextField
+                key={propName}
+                label={schema.label}
+                value={component.props[buttonPropName] as string}
+                onChange={(value) => updateButtonProp(buttonPropName, value)}
+              />
+            )
+          }
+
+          if (schema.type === 'select') {
+            return (
+              <SelectField
+                key={propName}
+                label={schema.label}
+                value={component.props[buttonPropName] as ButtonVariant}
+                options={schema.options}
+                onChange={(value) => updateButtonProp(buttonPropName, value)}
+              />
+            )
+          }
+
+          return (
+            <CheckboxField
+              key={propName}
+              label={schema.label}
+              checked={component.props[buttonPropName] as boolean}
+              onChange={(checked) => updateButtonProp(buttonPropName, checked)}
+            />
+          )
+        })}
       </aside>
     )
   }
 
   if (component.type === 'Card') {
-    const handleTitleChange = (title: string) => {
+    const updateCardProp = <PropName extends keyof CardProps>(
+      propName: PropName,
+      value: CardProps[PropName],
+    ) => {
       onChangeComponent({
         ...component,
         props: {
           ...component.props,
-          title,
+          [propName]: value,
         },
       })
     }
 
-    const handleDescriptionChange = (description: string) => {
-      onChangeComponent({
-        ...component,
-        props: {
-          ...component.props,
-          description,
-        },
-      })
-    }
+    const cardPropsSchema = componentRegistry.Card.propsSchema
 
     return (
       <aside className="inspector-pane">
         <h2>Inspector</h2>
-        <TextField label="title" value={component.props.title} onChange={handleTitleChange} />
-        <TextField
-          label="description"
-          value={component.props.description}
-          onChange={handleDescriptionChange}
-        />
+        {Object.entries(cardPropsSchema).map(([propName, schema]) => {
+          const cardPropName = propName as keyof CardProps
+
+          return (
+            <TextField
+              key={propName}
+              label={schema.label}
+              value={component.props[cardPropName]}
+              onChange={(value) => updateCardProp(cardPropName, value)}
+            />
+          )
+        })}
       </aside>
     )
   }
 
-  const handlePlaceholderChange = (placeholder: string) => {
+  const updateInputProp = <PropName extends keyof InputProps>(
+    propName: PropName,
+    value: InputProps[PropName],
+  ) => {
     onChangeComponent({
       ...component,
       props: {
         ...component.props,
-        placeholder,
+        [propName]: value,
       },
     })
   }
 
-  const handleDisabledChange = (disabled: boolean) => {
-    onChangeComponent({
-      ...component,
-      props: {
-        ...component.props,
-        disabled,
-      },
-    })
-  }
+  const inputPropsSchema = componentRegistry.Input.propsSchema
 
   return (
     <aside className="inspector-pane">
       <h2>Inspector</h2>
-      <TextField
-        label="placeholder"
-        value={component.props.placeholder}
-        onChange={handlePlaceholderChange}
-      />
-      <CheckboxField
-        label="disabled"
-        checked={component.props.disabled}
-        onChange={handleDisabledChange}
-      />
+      {Object.entries(inputPropsSchema).map(([propName, schema]) => {
+        const inputPropName = propName as keyof InputProps
+
+        if (schema.type === 'text') {
+          return (
+            <TextField
+              key={propName}
+              label={schema.label}
+              value={component.props[inputPropName] as string}
+              onChange={(value) => updateInputProp(inputPropName, value)}
+            />
+          )
+        }
+
+        return (
+          <CheckboxField
+            key={propName}
+            label={schema.label}
+            checked={component.props[inputPropName] as boolean}
+            onChange={(checked) => updateInputProp(inputPropName, checked)}
+          />
+        )
+      })}
     </aside>
   )
 }
