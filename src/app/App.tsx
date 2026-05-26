@@ -2,6 +2,7 @@ import { useState } from 'react'
 import Sidebar from '../components/Sidebar'
 import PreviewPane from '../components/PreviewPane'
 import InspectorPane from '../components/InspectorPane'
+import { componentRegistry } from '../registry/componentRegistry'
 import type { EditorNode } from '../types/editor'
 import '/src/styles/App.css'
 
@@ -10,27 +11,17 @@ function App() {
     {
       id: 'btn-1',
       type: 'Button',
-      props: {
-        label: 'Save',
-        variant: 'primary',
-        disabled: false,
-      },
+      props: { ...componentRegistry.Button.defaultProps },
     },
     {
       id: 'card-1',
       type: 'Card',
-      props: {
-        title: 'Card Title',
-        description: 'Card description',
-      },
+      props: { ...componentRegistry.Card.defaultProps },
     },
     {
       id: 'input-1',
       type: 'Input',
-      props: {
-        placeholder: 'Type here',
-        disabled: false,
-      },
+      props: { ...componentRegistry.Input.defaultProps },
     },
   ])
 

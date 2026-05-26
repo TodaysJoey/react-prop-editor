@@ -1,4 +1,5 @@
 import type { EditorNode } from '../types/editor'
+import { componentRegistry } from '../registry/componentRegistry'
 
 type SidebarProps = {
   components: EditorNode[]
@@ -16,7 +17,7 @@ const Sidebar = ({ components, selectedComponentId, onSelectComponent }: Sidebar
           onClick={() => onSelectComponent(component.id)}
           type="button"
         >
-          {component.type}
+          {componentRegistry[component.type].label}
         </button>
       ))}
     </div>
