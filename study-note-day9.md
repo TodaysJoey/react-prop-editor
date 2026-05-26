@@ -122,9 +122,148 @@ schema-driven 방식은 다르다.
   -> Inspector는 schema를 보고 자동으로 입력 UI 생성
 ```
 
+아키텍처적으로 표현하면 다음과 같다.
+
+```txt
+UI 렌더링 규칙을 코드 분기에서 데이터 스키마로 이동시킨 구조
+```
+
+`schema-driven`은 꽤 보편적으로 쓰는 표현이다.
+
+특히 폼, 에디터, CMS, admin tool, API validation, design system 쪽에서 자주 나온다.
+
+비슷한 표현도 있다.
+
+```txt
+schema-driven UI
+configuration-driven UI
+metadata-driven UI
+declarative rendering
+data-driven rendering
+```
+
+다만 뉘앙스는 조금씩 다르다.
+
+```txt
+schema-driven
+  -> 데이터 구조나 필드 구조를 설명하는 schema를 기반으로 UI를 만든다는 느낌이 강하다.
+
+configuration-driven
+  -> schema보다 더 넓은 표현이다. 설정값을 기반으로 동작을 바꾸는 구조까지 포함한다.
+
+data-driven
+  -> 가장 넓은 표현이다. 데이터에 따라 화면이 달라진다는 뜻이다.
+```
+
+지금 프로젝트에서는 `schema-driven inspector`라는 표현이 잘 맞는다.
+
+`propsSchema`가 단순 데이터가 아니라 다음 정보를 설명하기 때문이다.
+
+```txt
+이 prop은 어떤 타입인가?
+라벨은 무엇인가?
+선택지는 무엇인가?
+어떤 입력 UI로 편집해야 하는가?
+```
+
+한국어로 풀면 다음처럼 이해할 수 있다.
+
+```txt
+스키마를 보고 자동으로 편집 UI를 만드는 구조
+```
+
+또는:
+
+```txt
+컴포넌트 props 편집 방식을 코드에 직접 박지 않고,
+registry의 schema에 선언해두는 방식
+```
+
 ---
 
-## 3. type은 단순한 모양 선언만 하는 것이 아니다
+## 3. registry는 무엇인가?
+
+`componentRegistry`도 같은 계열의 아키텍처 개념이다.
+
+쉽게 말하면 registry는 등록표다.
+
+현재 프로젝트의 `componentRegistry`는 컴포넌트 타입 이름을 기준으로, 그 컴포넌트에 필요한 정보를 모아둔다.
+
+```txt
+Button
+  -> 화면에 보여줄 이름(label)
+  -> preview 컴포넌트
+  -> 기본 props(defaultProps)
+  -> propsSchema
+
+Card
+  -> label
+  -> preview
+  -> defaultProps
+  -> propsSchema
+
+Input
+  -> label
+  -> preview
+  -> defaultProps
+  -> propsSchema
+```
+
+즉 코드 곳곳에서 다음처럼 직접 분기하지 않는다.
+
+```ts
+if (type === 'Button') {
+  // Button 처리
+}
+
+if (type === 'Card') {
+  // Card 처리
+}
+```
+
+대신 타입을 key로 사용해 registry에서 필요한 정보를 찾는다.
+
+```ts
+componentRegistry[type]
+```
+
+아키텍처적으로 보면 registry도 다음 방향이다.
+
+```txt
+하드코딩된 분기
+  -> 중앙화된 설정/메타데이터
+```
+
+`schema-driven`이 "schema를 보고 UI를 만든다"라면, `registry`는 "type을 보고 관련 정보를 찾는다"에 가깝다.
+
+둘을 합치면 현재 구조는 다음 방향으로 가고 있다.
+
+```txt
+component.type
+  -> componentRegistry에서 설정 찾기
+  -> preview로 미리보기 렌더링
+  -> defaultProps로 초기값 생성
+  -> propsSchema로 inspector 렌더링
+```
+
+즉 `componentRegistry`는 점점 컴포넌트 메타데이터의 중심 저장소가 되고 있다.
+
+보편적인 표현으로는 다음과 같은 말도 쓴다.
+
+```txt
+registry pattern
+metadata registry
+component registry
+configuration registry
+```
+
+이 프로젝트에서는 `componentRegistry`라는 이름이 자연스럽다.
+
+이 에디터가 지원하는 컴포넌트 목록과 그 메타정보를 등록해둔 곳이기 때문이다.
+
+---
+
+## 4. type은 단순한 모양 선언만 하는 것이 아니다
 
 오늘 가장 크게 느낀 부분이다.
 
@@ -189,7 +328,7 @@ TypeScript 제네릭 타입
 
 ---
 
-## 4. PropSchemaField<Value> 읽기
+## 5. PropSchemaField<Value> 읽기
 
 오늘 작성한 핵심 타입은 다음과 같다.
 
@@ -266,7 +405,7 @@ type B =
 
 ---
 
-## 5. string이면 왜 유니온 타입이 되는가?
+## 6. string이면 왜 유니온 타입이 되는가?
 
 이 부분:
 
@@ -323,7 +462,7 @@ const wrongSchema: PropSchemaField<string> = {
 
 ---
 
-## 6. never는 무엇인가?
+## 7. never는 무엇인가?
 
 `never`는 TypeScript에서 불가능한 타입이다.
 
@@ -386,7 +525,7 @@ type PropSchemaField<Value> =
 
 ---
 
-## 7. [Value] extends [boolean]은 왜 쓰는가?
+## 8. [Value] extends [boolean]은 왜 쓰는가?
 
 처음 보면 이 문법이 가장 낯설다.
 
@@ -506,7 +645,7 @@ Value extends string
 
 ---
 
-## 8. 조건부 타입은 유니온에 대해 map처럼 동작할 수 있다
+## 9. 조건부 타입은 유니온에 대해 map처럼 동작할 수 있다
 
 TypeScript 조건부 타입은 기본적으로 유니온을 멤버별로 변환할 수 있다.
 
@@ -577,7 +716,7 @@ type Result = ('a' | 'b')[]
 
 ---
 
-## 9. 타입을 엄격하게 만들수록 타입 코드도 복잡해진다
+## 10. 타입을 엄격하게 만들수록 타입 코드도 복잡해진다
 
 오늘 배운 중요한 감각이다.
 
@@ -643,7 +782,7 @@ type PropSchemaField =
 
 ---
 
-## 10. 나중에 리팩토링할 방향
+## 11. 나중에 리팩토링할 방향
 
 현재 타입은 한 번에 읽기에는 조금 무겁다.
 
