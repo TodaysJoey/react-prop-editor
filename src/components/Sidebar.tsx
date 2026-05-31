@@ -1,20 +1,18 @@
-import type { EditorNode } from '../types/editor'
+import { useEditorStore } from '../hooks/useEditorStore'
 import { componentRegistry } from '../registry/componentRegistry'
 
-type SidebarProps = {
-  components: EditorNode[]
-  selectedComponentId: string
-  onSelectComponent: (id: string) => void
-}
+const Sidebar = () => {
+  const components = useEditorStore((state) => state.components)
+  const selectedComponentId = useEditorStore((state) => state.selectedComponentId)
+  const setSelectedComponentId = useEditorStore((state) => state.setSelectedComponentId)
 
-const Sidebar = ({ components, selectedComponentId, onSelectComponent }: SidebarProps) => {
   return (
     <div className="sidebar">
       {components.map((component) => (
         <button
           className={component.id === selectedComponentId ? 'sidebar-item selected' : 'sidebar-item'}
           key={component.id}
-          onClick={() => onSelectComponent(component.id)}
+          onClick={() => setSelectedComponentId(component.id)}
           type="button"
         >
           {componentRegistry[component.type].label}

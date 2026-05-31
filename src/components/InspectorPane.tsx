@@ -1,17 +1,18 @@
-import type { EditorNode } from '../types/editor'
+import { useEditorStore } from '../hooks/useEditorStore'
 import { componentRegistry } from '../registry/componentRegistry'
+import type { EditorNode } from '../types/editor'
 import CheckboxField from './inspector/CheckboxField'
 import SelectField from './inspector/SelectField'
 import TextField from './inspector/TextField'
 
-type InspectorPaneProps = {
-  component?: EditorNode
-  onChangeComponent: (component: EditorNode) => void
-}
-
 type PropValue = string | boolean
 
-const InspectorPane = ({ component, onChangeComponent }: InspectorPaneProps) => {
+const InspectorPane = () => {
+  const component = useEditorStore((state) =>
+    state.components.find((c) => c.id === state.selectedComponentId)
+  )
+  const updateComponent = useEditorStore((state) => state.updateComponent)
+
   if (!component) {
     return (
       <aside className="inspector-pane">
@@ -33,7 +34,7 @@ const InspectorPane = ({ component, onChangeComponent }: InspectorPaneProps) => 
       },
     } as EditorNode
 
-    onChangeComponent(updatedComponent)
+    updateComponent(updatedComponent)
   }
 
   return (

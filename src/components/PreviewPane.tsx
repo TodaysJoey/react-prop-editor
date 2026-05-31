@@ -1,12 +1,12 @@
 import type { ComponentType } from 'react'
-import type { EditorNode } from '../types/editor'
+import { useEditorStore } from '../hooks/useEditorStore'
 import { componentRegistry } from '../registry/componentRegistry'
 
-type PreviewPaneProps = {
-  component?: EditorNode
-}
+const PreviewPane = () => {
+  const component = useEditorStore((state) =>
+    state.components.find((c) => c.id === state.selectedComponentId)
+  )
 
-const PreviewPane = ({ component }: PreviewPaneProps) => {
   const renderPreview = () => {
     if (!component) {
       return <p className="preview-empty">선택된 컴포넌트가 없습니다.</p>
