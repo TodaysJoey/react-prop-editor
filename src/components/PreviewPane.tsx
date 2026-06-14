@@ -4,7 +4,7 @@ import { componentRegistry } from '../registry/componentRegistry'
 
 const PreviewPane = () => {
   const component = useEditorStore((state) =>
-    state.components.find((c) => c.id === state.selectedComponentId)
+    state.components.find((c) => c.id === state.selectedComponentId),
   )
 
   const renderPreview = () => {

@@ -10,7 +10,9 @@ const Sidebar = () => {
     <div className="sidebar">
       {components.map((component) => (
         <button
-          className={component.id === selectedComponentId ? 'sidebar-item selected' : 'sidebar-item'}
+          className={
+            component.id === selectedComponentId ? 'sidebar-item selected' : 'sidebar-item'
+          }
           key={component.id}
           onClick={() => setSelectedComponentId(component.id)}
           type="button"

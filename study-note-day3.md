@@ -35,9 +35,7 @@ const [selectedComponentId, setSelectedComponentId] = useState('btn-1')
 이 id를 이용해서 실제 선택된 데이터를 찾는다.
 
 ```tsx
-const selectedComponent = components.find(
-  (component) => component.id === selectedComponentId
-)
+const selectedComponent = components.find((component) => component.id === selectedComponentId)
 ```
 
 여기서 `selectedComponentId`는 "현재 선택된 컴포넌트의 id"이고, `selectedComponent`는 "그 id에 해당하는 실제 데이터"다.
@@ -250,9 +248,7 @@ type PreviewPaneProps = {
 이번 코드에서 `?`가 필요한 이유는 `find` 때문이다.
 
 ```tsx
-const selectedComponent = components.find(
-  (component) => component.id === selectedComponentId
-)
+const selectedComponent = components.find((component) => component.id === selectedComponentId)
 ```
 
 `find`는 조건에 맞는 값을 못 찾을 수도 있다.

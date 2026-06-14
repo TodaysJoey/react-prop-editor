@@ -243,7 +243,7 @@ type ButtonNode = {
 그래서 이 코드:
 
 ```ts
-Extract<EditorNode, { type: Type }>['props']
+;(Extract < EditorNode, { type: Type } > ['props'])
 ```
 
 는 이렇게 읽을 수 있다.
@@ -263,14 +263,13 @@ type이 Type인 항목을 고르고
 긴 타입은 읽기 어렵다.
 
 ```ts
-Extract<EditorNode, { type: Type }>['props']
+;(Extract < EditorNode, { type: Type } > ['props'])
 ```
 
 그래서 이 타입에 이름을 붙일 수 있다.
 
 ```ts
-type PropsOf<Type extends EditorNode['type']> =
-  Extract<EditorNode, { type: Type }>['props']
+type PropsOf<Type extends EditorNode['type']> = Extract<EditorNode, { type: Type }>['props']
 ```
 
 그러면 아래 두 코드는 같은 뜻이다.

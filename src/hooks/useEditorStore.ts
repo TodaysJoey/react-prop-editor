@@ -7,6 +7,7 @@ interface EditorStore {
   selectedComponentId: string
   setSelectedComponentId: (id: string) => void
   updateComponent: (nextComponent: EditorNode) => void
+  importState: (components: EditorNode[], selectedComponentId: string) => void
 }
 
 export const useEditorStore = create<EditorStore>((set) => ({
@@ -32,7 +33,8 @@ export const useEditorStore = create<EditorStore>((set) => ({
   updateComponent: (nextComponent) =>
     set((state) => ({
       components: state.components.map((component) =>
-        component.id === nextComponent.id ? nextComponent : component
+        component.id === nextComponent.id ? nextComponent : component,
       ),
     })),
+  importState: (components, selectedComponentId) => set({ components, selectedComponentId }),
 }))

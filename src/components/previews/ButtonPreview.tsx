@@ -6,7 +6,11 @@ type ButtonPreviewProps = {
 
 const ButtonPreview = ({ label, variant, disabled }: ButtonPreviewProps) => {
   return (
-    <button className={`preview-button preview-button-${variant}`} disabled={disabled} type="button">
+    <button
+      className={`preview-button preview-button-${variant}`}
+      disabled={disabled}
+      type="button"
+    >
       {label}
     </button>
   )

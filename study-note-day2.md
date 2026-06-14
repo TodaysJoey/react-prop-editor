@@ -55,11 +55,9 @@ React에서 배열을 화면에 그릴 때는 보통 `map`을 쓴다.
 이유는 `map`이 "배열을 다른 배열로 변환해서 반환"하기 때문이다.
 
 ```tsx
-{components.map((component) => (
-  <button key={component.id}>
-    {component.type}
-  </button>
-))}
+{
+  components.map((component) => <button key={component.id}>{component.type}</button>)
+}
 ```
 
 위 코드는 `components` 배열을 버튼 JSX 배열로 바꾼다.
@@ -67,7 +65,7 @@ React에서 배열을 화면에 그릴 때는 보통 `map`을 쓴다.
 즉 이런 데이터가:
 
 ```ts
-[
+;[
   { id: 'btn-1', type: 'Button' },
   { id: 'card-1', type: 'Card' },
   { id: 'input-1', type: 'Input' },
@@ -77,11 +75,7 @@ React에서 배열을 화면에 그릴 때는 보통 `map`을 쓴다.
 이런 UI로 변환된다.
 
 ```tsx
-[
-  <button>Button</button>,
-  <button>Card</button>,
-  <button>Input</button>,
-]
+;[<button>Button</button>, <button>Card</button>, <button>Input</button>]
 ```
 
 ### forEach와의 차이
@@ -106,11 +100,7 @@ console.log(result) // undefined
 const items = []
 
 for (const component of components) {
-  items.push(
-    <button key={component.id}>
-      {component.type}
-    </button>
-  )
+  items.push(<button key={component.id}>{component.type}</button>)
 }
 
 return <div>{items}</div>
@@ -187,11 +177,7 @@ React에서는 DOM을 직접 찾아서 수정하지 않는다.
 ```tsx
 const [count, setCount] = useState(0)
 
-return (
-  <button onClick={() => setCount(count + 1)}>
-    {count}
-  </button>
-)
+return <button onClick={() => setCount(count + 1)}>{count}</button>
 ```
 
 React에서는 상태만 바꾼다.
@@ -224,9 +210,7 @@ function Counter() {
   return (
     <div>
       <h1>Counter</h1>
-      <button onClick={() => setCount(count + 1)}>
-        {count}
-      </button>
+      <button onClick={() => setCount(count + 1)}>{count}</button>
     </div>
   )
 }
@@ -311,11 +295,9 @@ React는 이전 렌더 결과와 새 렌더 결과를 비교한다.
 목록을 렌더링할 때 `key`를 넣는 이유가 여기에 있다.
 
 ```tsx
-{components.map((component) => (
-  <button key={component.id}>
-    {component.type}
-  </button>
-))}
+{
+  components.map((component) => <button key={component.id}>{component.type}</button>)
+}
 ```
 
 React는 `key`를 보고 이전 항목과 새 항목을 연결한다.
@@ -367,4 +349,3 @@ onSelectComponent(component.id)
 React:
 상태를 변경하면 React가 UI를 다시 계산하고 필요한 DOM 변경만 적용한다.
 ```
-

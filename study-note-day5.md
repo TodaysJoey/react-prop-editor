@@ -114,9 +114,7 @@ React에서는 이런 중첩된 상태를 직접 수정하지 않고 새 배열,
 ```tsx
 setComponents((prev) =>
   prev.map((item) =>
-    item.id === selectedId
-      ? { ...item, props: { ...item.props, [key]: value } }
-      : item,
+    item.id === selectedId ? { ...item, props: { ...item.props, [key]: value } } : item,
   ),
 )
 ```

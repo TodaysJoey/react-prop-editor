@@ -238,8 +238,7 @@ ComponentPropsMap['Card']
 다음 타입을 보자.
 
 ```ts
-export type ComponentProps<Type extends ComponentType = ComponentType> =
-  ComponentPropsMap[Type]
+export type ComponentProps<Type extends ComponentType = ComponentType> = ComponentPropsMap[Type]
 ```
 
 여기서 중요한 부분은 이 문법이다.
@@ -259,7 +258,7 @@ Type이라는 타입 매개변수를 받는다.
 현재 `ComponentType`은 이렇다.
 
 ```ts
-'Button' | 'Card' | 'Input'
+;'Button' | 'Card' | 'Input'
 ```
 
 그래서 가능한 사용은 다음과 같다.
@@ -291,7 +290,7 @@ type AnyComponentProps = ComponentProps<ComponentType>
 결과는 전체 props 후보가 된다.
 
 ```ts
-ButtonProps | CardProps | InputProps
+;ButtonProps | CardProps | InputProps
 ```
 
 즉 이 문법은 "특정 컴포넌트 props를 꺼낼 수도 있고, 전체 props union으로 쓸 수도 있게" 해준다.
@@ -327,7 +326,7 @@ TypeScript가 타입을 만들 때 union을 기준으로 객체 타입을 펼치
 현재 `ComponentType`은 다음 union이다.
 
 ```ts
-'Button' | 'Card' | 'Input'
+;'Button' | 'Card' | 'Input'
 ```
 
 그러면 mapped type은 대략 이렇게 펼쳐진다.
@@ -409,7 +408,8 @@ Type은 `'Button'`이다.
   Button: ButtonNode
   Card: CardNode
   Input: InputNode
-}['Button']
+}
+;['Button']
 ```
 
 결과는 `ButtonNode`다.
@@ -435,13 +435,14 @@ EditorNode<ComponentType>
   Button: ButtonNode
   Card: CardNode
   Input: InputNode
-}['Button' | 'Card' | 'Input']
+}
+;['Button' | 'Card' | 'Input']
 ```
 
 결과는 세 노드 타입의 union이다.
 
 ```ts
-ButtonNode | CardNode | InputNode
+;ButtonNode | CardNode | InputNode
 ```
 
 즉 `EditorNode`는 전체 노드 union이고, `EditorNode<'Button'>`은 Button 노드 하나만 정확히 꺼낸 타입이다.
@@ -484,7 +485,7 @@ type NodeMap = {
 중요한 것은 이름이 아니라 이 구조다.
 
 ```ts
-[변수이름 in 유니온타입]
+;[변수이름 in 유니온타입]
 ```
 
 다만 바깥 제네릭 이름이 이미 `Type`이라면 안쪽 mapped type 변수도 `Type`이라고 쓰면 헷갈린다.
@@ -571,8 +572,7 @@ export type ComponentPropsMap = {
   Input: InputProps
 }
 
-export type ComponentProps<Type extends ComponentType = ComponentType> =
-  ComponentPropsMap[Type]
+export type ComponentProps<Type extends ComponentType = ComponentType> = ComponentPropsMap[Type]
 
 export type EditorNode<Type extends ComponentType = ComponentType> = {
   [Key in ComponentType]: {

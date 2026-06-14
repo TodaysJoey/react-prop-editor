@@ -44,10 +44,10 @@ React의 단방향 데이터 흐름, 컴포넌트 렌더링 최적화, 그리고
           (선택 노드 속성 동적 편집)
 ```
 
-* **App:** 렌더링 뼈대 레이아웃만 제공하며 상태를 전혀 직접 가지고 있지 않습니다.
-* **Sidebar:** 스토어로부터 `components` 배열을 구독하여 컴포넌트 목록을 출력하고, 클릭 시 선택 액션을 직접 호출합니다.
-* **PreviewPane:** 선택된 컴포넌트의 데이터만 정밀하게 구독(Selector)하여 화면에 UI로 실시간 렌더링합니다.
-* **InspectorPane:** 선택된 컴포넌트 정보와 업데이트 액션을 구독하여 동적으로 알맞은 속성 편집기 필드(Text, Select, Checkbox)를 그려줍니다.
+- **App:** 렌더링 뼈대 레이아웃만 제공하며 상태를 전혀 직접 가지고 있지 않습니다.
+- **Sidebar:** 스토어로부터 `components` 배열을 구독하여 컴포넌트 목록을 출력하고, 클릭 시 선택 액션을 직접 호출합니다.
+- **PreviewPane:** 선택된 컴포넌트의 데이터만 정밀하게 구독(Selector)하여 화면에 UI로 실시간 렌더링합니다.
+- **InspectorPane:** 선택된 컴포넌트 정보와 업데이트 액션을 구독하여 동적으로 알맞은 속성 편집기 필드(Text, Select, Checkbox)를 그려줍니다.
 
 ---
 
@@ -57,10 +57,10 @@ React의 단방향 데이터 흐름, 컴포넌트 렌더링 최적화, 그리고
 
 ```typescript
 interface EditorStore {
-  components: EditorNode[]                  // 에디터 컴포넌트 노드 목록
-  selectedComponentId: string               // 선택된 컴포넌트 고유 ID
-  setSelectedComponentId: (id: string) => void  // 컴포넌트 선택 변경 액션
-  updateComponent: (nextComponent: EditorNode) => void  // 컴포넌트 속성 업데이트 액션
+  components: EditorNode[] // 에디터 컴포넌트 노드 목록
+  selectedComponentId: string // 선택된 컴포넌트 고유 ID
+  setSelectedComponentId: (id: string) => void // 컴포넌트 선택 변경 액션
+  updateComponent: (nextComponent: EditorNode) => void // 컴포넌트 속성 업데이트 액션
 }
 ```
 
@@ -78,9 +78,9 @@ type EditorNode = {
 }
 ```
 
-* `id`: 사이드바 선택과 배열 업데이트에 사용하는 고유 값입니다.
-* `type`: 어떤 Preview와 Inspector 설정을 사용할지 결정하는 값입니다.
-* `props`: 실제 Preview 컴포넌트에 전달되는 편집 가능한 속성입니다.
+- `id`: 사이드바 선택과 배열 업데이트에 사용하는 고유 값입니다.
+- `type`: 어떤 Preview와 Inspector 설정을 사용할지 결정하는 값입니다.
+- `props`: 실제 Preview 컴포넌트에 전달되는 편집 가능한 속성입니다.
 
 ---
 

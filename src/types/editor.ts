@@ -22,8 +22,7 @@ export type ComponentPropsMap = {
   Input: InputProps
 }
 
-export type ComponentProps<Type extends ComponentType = ComponentType> =
-  ComponentPropsMap[Type]
+export type ComponentProps<Type extends ComponentType = ComponentType> = ComponentPropsMap[Type]
 
 export type EditorNode<Type extends ComponentType = ComponentType> = {
   [Key in ComponentType]: {

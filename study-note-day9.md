@@ -281,12 +281,11 @@ type User = {
 예를 들어:
 
 ```ts
-type InputType<Value> =
-  Value extends boolean
-    ? 'checkbox'
-    : Value extends string
-      ? 'text'
-      : 'unknown'
+type InputType<Value> = Value extends boolean
+  ? 'checkbox'
+  : Value extends string
+    ? 'text'
+    : 'unknown'
 ```
 
 이 타입은 실제 값을 검사하는 것이 아니다.
@@ -511,14 +510,13 @@ range로 받을지
 나중에 number를 지원하고 싶으면 조건을 추가하면 된다.
 
 ```ts
-type PropSchemaField<Value> =
-  [Value] extends [boolean]
-    ? BooleanSchema
-    : [Value] extends [string]
-      ? TextSchema | SelectSchema<Value>
-      : [Value] extends [number]
-        ? NumberSchema
-        : never
+type PropSchemaField<Value> = [Value] extends [boolean]
+  ? BooleanSchema
+  : [Value] extends [string]
+    ? TextSchema | SelectSchema<Value>
+    : [Value] extends [number]
+      ? NumberSchema
+      : never
 ```
 
 여기서 `never`는 "최후의 기본 타입"이라기보다 "여기까지 왔으면 허용할 타입이 없다"는 안전장치다.
@@ -742,14 +740,13 @@ number prop
 지원하는 prop 타입이 늘어나면 조건 분기도 늘어난다.
 
 ```ts
-type PropSchemaField<Value> =
-  [Value] extends [boolean]
-    ? BooleanSchema
-    : [Value] extends [string]
-      ? TextSchema | SelectSchema<Value>
-      : [Value] extends [number]
-        ? NumberSchema
-        : never
+type PropSchemaField<Value> = [Value] extends [boolean]
+  ? BooleanSchema
+  : [Value] extends [string]
+    ? TextSchema | SelectSchema<Value>
+    : [Value] extends [number]
+      ? NumberSchema
+      : never
 ```
 
 그래서 실무에서는 균형을 잡아야 한다.
@@ -825,12 +822,11 @@ type SelectSchema<Value extends string> = {
   options: readonly Value[]
 }
 
-type PropSchemaField<Value> =
-  [Value] extends [boolean]
-    ? BooleanSchema
-    : [Value] extends [string]
-      ? TextSchema | SelectSchema<Value>
-      : never
+type PropSchemaField<Value> = [Value] extends [boolean]
+  ? BooleanSchema
+  : [Value] extends [string]
+    ? TextSchema | SelectSchema<Value>
+    : never
 ```
 
 의미는 같지만 읽기가 훨씬 편해진다.
