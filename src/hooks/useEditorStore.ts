@@ -2,15 +2,23 @@ import { create } from 'zustand'
 import { componentRegistry } from '../registry/componentRegistry'
 import type { EditorNode } from '../types/editor'
 
-interface EditorStore {
+interface EditorPresent {
   components: EditorNode[]
   selectedComponentId: string
+}
+
+interface EditorStore {
+  past: EditorPresent[]
+  present: EditorPresent
+  future: EditorPresent[]
   setSelectedComponentId: (id: string) => void
   updateComponent: (nextComponent: EditorNode) => void
   importState: (components: EditorNode[], selectedComponentId: string) => void
+  undo: () => void
+  redo: () => void
 }
 
-export const useEditorStore = create<EditorStore>((set) => ({
+const initialPresent: EditorPresent = {
   components: [
     {
       id: 'btn-1',
@@ -29,12 +37,75 @@ export const useEditorStore = create<EditorStore>((set) => ({
     },
   ] as EditorNode[],
   selectedComponentId: 'btn-1',
-  setSelectedComponentId: (id) => set({ selectedComponentId: id }),
-  updateComponent: (nextComponent) =>
+}
+
+const pushHistory = (state: EditorStore, present: EditorPresent) => ({
+  past: [...state.past, state.present],
+  present,
+  future: [],
+})
+
+export const useEditorStore = create<EditorStore>((set) => ({
+  past: [],
+  present: initialPresent,
+  future: [],
+  setSelectedComponentId: (id) =>
     set((state) => ({
-      components: state.components.map((component) =>
-        component.id === nextComponent.id ? nextComponent : component,
-      ),
+      present: {
+        ...state.present,
+        selectedComponentId: id,
+      },
     })),
-  importState: (components, selectedComponentId) => set({ components, selectedComponentId }),
+  updateComponent: (nextComponent) =>
+    set((state) => {
+      const componentExists = state.present.components.some(
+        (component) => component.id === nextComponent.id,
+      )
+
+      if (!componentExists) {
+        return state
+      }
+
+      return pushHistory(state, {
+        ...state.present,
+        components: state.present.components.map((component) =>
+          component.id === nextComponent.id ? nextComponent : component,
+        ),
+      })
+    }),
+  importState: (components, selectedComponentId) =>
+    set((state) =>
+      pushHistory(state, {
+        components,
+        selectedComponentId,
+      }),
+    ),
+  undo: () =>
+    set((state) => {
+      if (state.past.length === 0) {
+        return state
+      }
+
+      const previous = state.past[state.past.length - 1]
+
+      return {
+        past: state.past.slice(0, -1),
+        present: previous,
+        future: [state.present, ...state.future],
+      }
+    }),
+  redo: () =>
+    set((state) => {
+      if (state.future.length === 0) {
+        return state
+      }
+
+      const next = state.future[0]
+
+      return {
+        past: [...state.past, state.present],
+        present: next,
+        future: state.future.slice(1),
+      }
+    }),
 }))

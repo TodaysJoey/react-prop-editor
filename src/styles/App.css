@@ -407,7 +407,9 @@
 
 .header-actions {
   display: flex;
+  flex-wrap: wrap;
   gap: 12px;
+  justify-content: flex-end;
 }
 
 .btn-primary,
@@ -443,6 +445,18 @@
   background: var(--accent-bg);
   border-color: var(--accent-border);
   transform: translateY(-1px);
+}
+
+.btn-primary:disabled,
+.btn-secondary:disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+  transform: none;
+}
+
+.history-btn {
+  width: 38px;
+  padding-inline: 0;
 }
 
 /* Modals */

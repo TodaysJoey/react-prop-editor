@@ -8,8 +8,8 @@ interface ExportModalProps {
 }
 
 const ExportModal = ({ isOpen, onClose }: ExportModalProps) => {
-  const components = useEditorStore((state) => state.components)
-  const selectedComponentId = useEditorStore((state) => state.selectedComponentId)
+  const components = useEditorStore((state) => state.present.components)
+  const selectedComponentId = useEditorStore((state) => state.present.selectedComponentId)
   const [copied, setCopied] = useState(false)
 
   const exportData = {

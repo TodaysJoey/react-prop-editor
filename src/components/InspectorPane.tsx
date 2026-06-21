@@ -9,7 +9,7 @@ type PropValue = string | boolean
 
 const InspectorPane = () => {
   const component = useEditorStore((state) =>
-    state.components.find((c) => c.id === state.selectedComponentId),
+    state.present.components.find((c) => c.id === state.present.selectedComponentId),
   )
   const updateComponent = useEditorStore((state) => state.updateComponent)
 
